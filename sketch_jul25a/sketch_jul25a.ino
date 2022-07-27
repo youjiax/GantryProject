@@ -20,7 +20,7 @@ int hitTOP = 0;
 */
 
 int pos = 0;
-int pos2 = 0;
+//int pos2 = 0;
 
 unsigned long currentTime;
 unsigned long prevTime;
@@ -130,11 +130,11 @@ void readEncoder2(){ //Anticlockwise incr pos
 
 //positive degrees = anticlockise
 void moveDegrees(int degrees, int motorDirec, int motorPower){
-  Serial.print(degrees);
-  Serial.println();
+  //Serial.print(degrees);
+  //Serial.println();
   double counts = degrees*5.7333; //weird fracion is 2064/360 -- 86/15 CAUSES OVERFLOW ISSUE
   //int absPos = abs(pos%2064); //need absolute
-  Serial.print(counts);
+ // Serial.print(counts);
   int error = counts - pos;
 
   int power = error*Kp;
