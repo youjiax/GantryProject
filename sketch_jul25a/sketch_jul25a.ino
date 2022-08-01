@@ -2,17 +2,15 @@
 
 
 #define ENCA 2 //YELLOW 20
-#define ENCB 3 //WHITE 21
-#define ENCA2 18
-#define ENCB2 19
+#define ENCB 8 //WHITE 21
+#define ENCA2 3
+#define ENCB2 9
 
 /*
 #define limitLEFT 13
 #define limitRIGHT 12
 #define limitBOTTOM 11
 #define limitTOP 10
-
-
 int hitLEFT = 0;
 int hitRIGHT = 0;
 int hitBOTTOM = 0;
@@ -81,23 +79,18 @@ void leftINT(){
     analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
     delay(1);
 }
-
 void rightINT(){
     hitRIGHT = 1;
     analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
     analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
      delay(1);
 }
-
-
 void bottomINT(){
     hitBOTTOM = 1;
     analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
     analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
      delay(1);
 }
-
-
 void topINT(){
     hitTOP = 1;
     analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
@@ -161,7 +154,7 @@ void loop() {
  
   Serial.println(pos);
 
-    moveDegrees(180, M1d, M1p); //Bottom right
+    moveDegrees(720, M1d, M1p); //Bottom right
     //moveDegrees(-360, M1d, M1p); //TOP LEFT
     //moveDegrees(360, M2d, M2p);// TOP RIGHT
    // moveDegrees(-180, M2d, M2p); //BOTTOM LEFT
