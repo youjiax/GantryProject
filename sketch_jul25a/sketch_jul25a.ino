@@ -18,7 +18,7 @@ int hitTOP = 0;
 */
 
 int pos = 0;
-//int pos2 = 0;
+int pos2 = 0;
 
 unsigned long currentTime;
 unsigned long prevTime;
@@ -52,11 +52,11 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(ENCA), readEncoder, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
 
 
-/*
+
     pinMode(ENCA2, INPUT);
     pinMode(ENCB2, INPUT);
     attachInterrupt(digitalPinToInterrupt(ENCA2), readEncoder2, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
-*/
+
 
 /*
     pinMode(limitLEFT, INPUT);
@@ -109,7 +109,7 @@ void readEncoder(){ //Anticlockwise incr pos
   }
 }
 
-/*
+
 void readEncoder2(){ //Anticlockwise incr pos
   int b2 = digitalRead(ENCB2);
   if(b2>0){
@@ -118,7 +118,7 @@ void readEncoder2(){ //Anticlockwise incr pos
     pos2--;
   }
 }
-*/
+
 
 
 //positive degrees = anticlockise
@@ -136,13 +136,13 @@ void moveDegrees(int degrees, int motorDirec, int motorPower){
     power = 255;
   }
   
-  if(error >= 0){ //rotate acw
+  if(error <= 0){ //rotate acw
     digitalWrite(motorDirec, HIGH); //LOW clockwise, HIGH anticlockwise
     analogWrite(motorPower, power);   //PWM Speed Control 255 is high 0 is low 
     
   }
 
-  if(error < 0){//rotate cw
+  if(error > 0){//rotate cw
     digitalWrite(motorDirec, LOW); //LOW clockwise, HIGH anticlockwise
     analogWrite(motorPower, power);   //PWM Speed Control 255 is high 0 is low 
     
@@ -154,10 +154,10 @@ void loop() {
  
   Serial.println(pos);
 
-    moveDegrees(720, M1d, M1p); //Bottom right
-    //moveDegrees(-360, M1d, M1p); //TOP LEFT
-    //moveDegrees(360, M2d, M2p);// TOP RIGHT
-   // moveDegrees(-180, M2d, M2p); //BOTTOM LEFT
+    moveDegrees(180, M1d, M1p); //Bottom right
+    //moveDegrees(720, M1d, M1p); //TOP LEFT
+    //moveDegrees(180, M2d, M2p);// TOP RIGHT
+    //moveDegrees(-180, M2d, M2p); //BOTTOM LEFT
     
 
     /*
