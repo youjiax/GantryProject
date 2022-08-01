@@ -1,0 +1,200 @@
+#include <util/delay.h>
+
+
+#define ENCA 2 //YELLOW 20
+#define ENCB 8 //WHITE 21
+#define ENCA2 3
+#define ENCB2 9
+
+
+#define limitLEFT 18
+#define limitRIGHT 19
+#define limitBOTTOM 20
+#define limitTOP 21
+
+
+int hitLEFT = 0;
+int hitRIGHT = 0;
+int hitBOTTOM = 0;
+int hitTOP = 0;
+
+
+
+
+
+
+
+
+
+void setup() {
+
+Serial.begin(9600);
+
+
+//NOT SURE IF NEED
+   // pinMode(M1p, OUTPUT); 
+   // pinMode(M2p, OUTPUT); 
+
+  
+
+
+//Limit switch interrupts:
+
+
+   pinMode(limitLEFT, INPUT);
+    pinMode(limitRIGHT, INPUT);
+    pinMode(limitBOTTOM, INPUT);
+    pinMode(limitTOP, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(limitLEFT), LeftLimit, CHANGE); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+  attachInterrupt(digitalPinToInterrupt(limitRIGHT), RightLimit, CHANGE); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+  attachInterrupt(digitalPinToInterrupt(limitBOTTOM), BottomLimit, CHANGE); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+  attachInterrupt(digitalPinToInterrupt(limitTOP), TopLimit, CHANGE); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+
+      pinMode(13, OUTPUT); //for the LED which will flash
+
+
+/*
+    pinMode(ENCA2, INPUT);
+    pinMode(ENCB2, INPUT);
+    attachInterrupt(digitalPinToInterrupt(ENCA2), readEncoder2, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+*/
+
+/*
+    pinMode(limitLEFT, INPUT);
+    pinMode(limitRIGHT, INPUT);
+    pinMode(limitBOTTOM, INPUT);
+    pinMode(limitTOP, INPUT);
+    attachInterrupt(digitalPinToInterrupt(limitLEFT), leftINT, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+    attachInterrupt(digitalPinToInterrupt(limitRIGHT), rightINT, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+    attachInterrupt(digitalPinToInterrupt(limitBOTTOM), bottomINT, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+    attachInterrupt(digitalPinToInterrupt(limitTOP), topINT, RISING); //INTERRUPT TRIGGERED ON RISING EDGE FOR ENCA, RUN READ ENCODER FUNC 
+*/
+
+ 
+}
+
+/*
+void leftINT(){
+    hitLEFT = 1;
+    analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
+    analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
+    delay(1);
+}
+void rightINT(){
+    hitRIGHT = 1;
+    analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
+    analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
+     delay(1);
+}
+void bottomINT(){
+    hitBOTTOM = 1;
+    analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
+    analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
+     delay(1);
+}
+void topINT(){
+    hitTOP = 1;
+    analogWrite(M1p, 0);   //PWM Speed Control 255 is high 0 is low 
+    analogWrite(M2p, 0);   //PWM Speed Control 255 is high 0 is low 
+     delay(1);
+}
+*/
+void LeftLimit()
+{
+
+if(digitalRead(limitLEFT) == true)
+{
+  hitLEFT = 1;
+  //digitalWrite(13,HIGH);
+    Serial.println("left high");
+}
+else
+{
+ // digitalWrite(13,LOW);
+   Serial.println("left low");
+  hitLEFT = 0;
+}
+}
+
+void RightLimit()
+{
+if(digitalRead(limitRIGHT) == true)
+{
+  hitRIGHT = 1;
+ // digitalWrite(13,HIGH);
+  Serial.println("right high");
+}
+else
+{
+ // digitalWrite(13,LOW);
+   Serial.println("right low");
+  hitRIGHT = 0;
+}
+
+}
+
+
+void BottomLimit()
+{
+if(digitalRead(limitBOTTOM) == true)
+{
+  hitBOTTOM = 1;
+
+ // STOP = 1;
+// digitalWrite(13,HIGH);
+  Serial.println("bottom high");
+}
+else
+{
+ // digitalWrite(13,LOW);
+  hitBOTTOM = 0;
+  Serial.println("bottom low");
+}
+
+}
+
+
+void TopLimit()
+{
+delay(50);
+  
+if(digitalRead(limitTOP) == true)
+{
+ //  STOP = 1;
+  hitTOP = 1;
+ // digitalWrite(13,HIGH);
+
+Serial.println("Top High");
+
+
+
+ 
+}
+else
+{
+  //digitalWrite(13,LOW);
+  hitTOP = 0;
+  Serial.println("Top low");
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void loop() {
+ 
+
+}
