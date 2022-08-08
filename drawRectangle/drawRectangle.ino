@@ -26,7 +26,7 @@ unsigned long currentTime;
 unsigned long prevTime;
 
 //Controller gains, Dubls for extra precision
-double Kp = 1.75;
+double Kp = 2;
 double Ki = 0.01;
 double Kd = 0.01;
 
@@ -99,12 +99,8 @@ double getY() {
 }
 
 void callibrationMode(){
-  do {
 
-  } while (digitalRead(leftLim) && digitalRead(botLim));
 
-  rightPos = 0;
-  leftPos = 0;
 
 }
 void drawRectangle(double Length, double Width) {  //length in mm breaks down rectangle in to 4 coordinates
@@ -159,5 +155,5 @@ void drawLine(double xPos, double yPos) {  //Inputs are in direction of an XY co
 
 void loop() {
   callibrationMode();
-  drawRectangle(100, 50);
+  drawRectangle(5, 5);
 }
