@@ -16,19 +16,17 @@
 #define botLim 20
 #define topLim 21
 
-#define motorDirection(errorValue) ((errorValue) > 0 ? (0) : (1))  //motor clockwise if error is larger than 0, else anticlockwise
+#define motorDirection(errorValue) ((errorValue) > 0 ? (1) : (0))  //motor clockwise if error is larger than 0, else anticlockwise
 
-int radius = 7.56;  //6.8
+int radius = 7.0;  //6.8
 
 int rightPos = 0, leftPos = 0, hitLeft = 0, hitRight = 0, hitBottom = 0, hitTop = 0;
 
 unsigned long currentTime;
 unsigned long prevTime;
 
-//Controller gains, Dubls for extra precision
-double Kp = 1.75;
-double Ki = 0.01;
-double Kd = 0.01;
+//Controller gains
+double Kp = 30;
 
 void setup() {
 
@@ -76,7 +74,7 @@ void readRightEncoder() {                        //Anticlockwise incr pos VERIFY
   digitalRead(ENCBR) ? rightPos++ : rightPos--;  //if ENCB1 is high, increase pos, else decrease
 }
 
-void readLeftEncoder() {  //Anticlockwise incr pos
+void readLeftEncoder() {                          //Anticlockwise incr pos
   digitalRead(ENCBL) ? leftPos++ : leftPos--;
 }
 
@@ -99,14 +97,37 @@ double getY() {
 }
 
 void callibrationMode(){
-  do {
-
-  } while (digitalRead(leftLim) && digitalRead(botLim));
+  while(!hitLeft){
+      digitalWrite(rightMD, 1);  
+      analogWrite(rightMP, 120);                   
+      digitalWrite(leftMD, 1);   
+      analogWrite(leftMP, 120);
+  }
+  while(hitLeft){
+      digitalWrite(rightMD, 0);  
+      analogWrite(rightMP, 120);                   
+      digitalWrite(leftMD, 0);   
+      analogWrite(leftMP, 120);
+  }
+  while(!hitBottom){
+      digitalWrite(rightMD, 0);  
+      analogWrite(rightMP, 120);                   
+      digitalWrite(leftMD, 1);   
+      analogWrite(leftMP, 120);
+  }
+  while(hitBottom){
+      digitalWrite(rightMD, 1);  
+      analogWrite(rightMP, 120);                   
+      digitalWrite(leftMD, 0);   
+      analogWrite(leftMP, 120);
+  }
+  analogWrite(rightMP, 0);  
+  analogWrite(leftMP, 0);
 
   rightPos = 0;
   leftPos = 0;
-
 }
+
 void drawRectangle(double Length, double Width) {  //length in mm breaks down rectangle in to 4 coordinates
   drawLine(0, Width);
   drawLine(Length, 0);
@@ -124,10 +145,12 @@ void drawLine(double xPos, double yPos) {  //Inputs are in direction of an XY co
   do {
     xError = xPos - getX();
     yError = yPos - getY();
+    //Serial.println(rightPos);
+    //Serial.println(leftPos);
 
     if (!hitLeft && !hitRight && !hitBottom && !hitTop) {
 
-      if (xError != 0) {  //both clockwise/anticlockwise for right/left movement
+      if (abs(xError)>1) {  //both clockwise/anticlockwise for right/left movement
 
         xPower = abs(xError) * Kp;
         xPower > 255 ? xPower = 255 : xPower = xPower;  //saturate power to 255 limit
@@ -138,7 +161,7 @@ void drawLine(double xPos, double yPos) {  //Inputs are in direction of an XY co
         analogWrite(leftMP, xPower);
       }
 
-      if (yError != 0) { //Right is anticlockwise and left is clockwise for top movement
+      if (abs(yError)>1) { //Right is anticlockwise and left is clockwise for top movement
 
         yPower = abs(yError) * Kp;
         yPower > 255 ? yPower = 255 : yPower = yPower;    //saturate power to 255 limit
@@ -153,11 +176,14 @@ void drawLine(double xPos, double yPos) {  //Inputs are in direction of an XY co
       analogWrite(rightMP, 0);
       analogWrite(leftMP, 0);
     }
-
-  } while ((xError > 0) && (yError > 0));
+    Serial.println(yError); 
+    Serial.println(xError);
+  } while ((abs(yError)>1) || (abs(xError)>1));
 }
 
 void loop() {
-  callibrationMode();
+  //callibrationMode();
+  drawLine(-50,0);
+  drawLine(0,-50);
   drawRectangle(100, 50);
 }
